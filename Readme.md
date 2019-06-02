@@ -1,7 +1,7 @@
 # Личный проект «Кексобукинг» [![Build status][travis-image]][travis-url]
 
 * Студент: [Алина Табачникас](https://up.htmlacademy.ru/javascript/17/user/95161).
-* Наставник: `Неизвестно`.
+* Наставник: `Денис Байдаров`.
 
 ---
 
