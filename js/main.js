@@ -4,26 +4,42 @@ var MAX_Y = 630;
 var PIN_OFFSET_X = -25;
 var PIN_OFFSET_Y = -70;
 var ARRAY_SIZE = 8;
-
-var AVATARS = ['img/avatars/user01.png', 'img/avatars/user02.png', 'img/avatars/user03.png', 'img/avatars/user04.png', 'img/avatars/user05.png', 'img/avatars/user06.png', 'img/avatars/user07.png', 'img/avatars/user08.png'];
 var TYPES = ['palace', 'flat', 'house ', 'bungalo'];
 
-var getRundomY = function () {
-  return (Math.floor(Math.random() * (MAX_Y - MIN_Y + 1)) + MIN_Y);
+var getAvatars = function () {
+  var avatars;
+  for (var i = 0; i < ARRAY_SIZE; i++) {
+    var avatarIndex = i + 1;
+    avatars[i] = 'img/avatars/user0' + avatarIndex + '.png';
+    // img/avatars/user{{xx}}.png
+  }
+  return avatars;
 };
 
-var getRundomX = function () {
-  var mapWidth = document.querySelector('.map__pins').offsetWidth;
-  return (Math.floor(Math.random() * (mapWidth + 1)));
+var avatars = getAvatars();
+
+var mapWidth = document.querySelector('.map__pins').offsetWidth;
+
+var getRandomValue = function (minValue, maxValue) {
+  return (Math.floor(Math.random() * (maxValue - minValue + 1)) + minValue);
 };
 
 var getAdvertisment = function (i) {
-  return {
-    'author': {'avatar': AVATARS[i]},
-    'offer': {'type': TYPES[i]},
-    'location': {'x': getRundomX(),
-      'y': getRundomY()},
-  };
+  if (i >= TYPES.length) {
+    return {
+      'author': {'avatar': avatars[i]},
+      'offer': {'type': TYPES[i - TYPES.length]},
+      'location': {'x': getRandomValue(0, mapWidth),
+        'y': getRandomValue(MIN_Y, MAX_Y)},
+    };
+  } else {
+    return {
+      'author': {'avatar': avatars[i]},
+      'offer': {'type': TYPES[i]},
+      'location': {'x': getRandomValue(0, mapWidth),
+        'y': getRandomValue(MIN_Y, MAX_Y)},
+    };
+  }
 };
 
 var getAdvertismentArray = function () {
@@ -35,6 +51,7 @@ var getAdvertismentArray = function () {
 };
 
 var pins = getAdvertismentArray();
+
 // remove map--fadded
 var elementMap = document.querySelector('.map');
 elementMap.classList.remove('map--faded');
@@ -50,7 +67,7 @@ var renderPin = function (pin) {
   pinElement.style.top = pin.location.y + PIN_OFFSET_Y + 'px';
   var avatarElement = pinElement.querySelector('img');
   avatarElement.src = pin.author.avatar;
-  avatarElement.alt = 'advertisment name' + pin.offer.type;
+  avatarElement.alt = 'advertisment name';
   return pinElement;
 };
 
