@@ -7,7 +7,7 @@ var ARRAY_SIZE = 8;
 var TYPES = ['palace', 'flat', 'house ', 'bungalo'];
 
 var getAvatars = function () {
-  var avatars;
+  var avatars = [];
   for (var i = 0; i < ARRAY_SIZE; i++) {
     var avatarIndex = i + 1;
     avatars[i] = 'img/avatars/user0' + avatarIndex + '.png';
