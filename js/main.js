@@ -8,9 +8,9 @@ var TYPES = ['palace', 'flat', 'house ', 'bungalo'];
 
 var getAvatars = function () {
   var avatars = [];
-  for (var i = 0; i < ARRAY_SIZE; i++) {
-    var avatarIndex = i + 1;
-    avatars[i] = 'img/avatars/user0' + avatarIndex + '.png';
+  for (var i = 1; i <= ARRAY_SIZE; i++) {
+    var avatarIndex = i;
+    avatars.push('img/avatars/user0' + avatarIndex + '.png');
     // img/avatars/user{{xx}}.png
   }
   return avatars;
@@ -25,27 +25,25 @@ var getRandomValue = function (minValue, maxValue) {
 };
 
 var getAdvertisment = function (i) {
-  if (i >= TYPES.length) {
-    return {
-      'author': {'avatar': avatars[i]},
-      'offer': {'type': TYPES[i - TYPES.length]},
-      'location': {'x': getRandomValue(0, mapWidth),
-        'y': getRandomValue(MIN_Y, MAX_Y)},
-    };
+  var typeIndex;
+  if (typeIndex >= TYPES.length) {
+    typeIndex = i - TYPES.length;
   } else {
-    return {
-      'author': {'avatar': avatars[i]},
-      'offer': {'type': TYPES[i]},
-      'location': {'x': getRandomValue(0, mapWidth),
-        'y': getRandomValue(MIN_Y, MAX_Y)},
-    };
+    typeIndex = i;
   }
+  return {
+    'author': {'avatar': avatars[i]},
+    'offer': {'type': TYPES[typeIndex]},
+    'location': {'x': getRandomValue(0, mapWidth),
+      'y': getRandomValue(MIN_Y, MAX_Y)},
+  };
 };
+
 
 var getAdvertismentArray = function () {
   var advertismentsArray = [];
   for (var i = 0; i < ARRAY_SIZE; i++) {
-    advertismentsArray[i] = getAdvertisment(i);
+    advertismentsArray.push(getAdvertisment(i));
   }
   return advertismentsArray;
 };
