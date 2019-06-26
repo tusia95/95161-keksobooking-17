@@ -8,7 +8,13 @@ var MAIN_PIN_OFFSET_X = 34;
 var MAIN_PIN_OFFSET_Y = 90;
 var ARRAY_SIZE = 8;
 var TYPES = ['palace', 'flat', 'house', 'bungalo'];
-var MIN_PRICES = [10000, 1000, 5000, 0];
+// var MIN_PRICES = [10000, 1000, 5000, 0];
+var ACCOMODATION_MIN_PRICES = {
+  palace: 10000,
+  flat: 1000,
+  house: 5000,
+  bungalo: 0
+};
 
 var getAvatars = function () {
   var avatars = [];
@@ -159,7 +165,7 @@ setPinStartPosition();
 mainPinElement.addEventListener('mouseup', setPinPosition);
 
 // get objects for accomodations (type and minprice)
-var getAccomodations = function () {
+/* var getAccomodations = function () {
   var accomodations = [];
   for (var i = 0; i < TYPES.length; i++) {
     accomodations[i] = {'type': TYPES[i],
@@ -167,10 +173,10 @@ var getAccomodations = function () {
     };
   }
   return accomodations;
-};
+}; */
 
 // get element from array with type == type
-var getAccomodationsIndex = function (type) {
+/* var getAccomodationsIndex = function (type) {
   var accArray = getAccomodations();
   for (var i = 0; i < accArray.length; i++) {
     if (accArray[i].type === type) {
@@ -179,14 +185,13 @@ var getAccomodationsIndex = function (type) {
     }
   }
   return index;
-};
+}; */
 
 var accomList = document.querySelector('#type');
 // set to value -> min price
 var setMinPrice = function () {
   var priceElem = document.querySelector('#price');
-  var elemIndex = getAccomodationsIndex(accomList.value);
-  var priceValue = getAccomodations()[elemIndex].minPrice;
+  var priceValue = ACCOMODATION_MIN_PRICES[accomList.value];
   priceElem.setAttribute('placeholder', priceValue);
   priceElem.setAttribute('min', priceValue);
 };
@@ -215,24 +220,15 @@ var timeoutList = document.querySelector('#timeout');
 
 // sinchronize timein timeout values
 var sinchronizeTimeoutForTimein = function () {
-  var times = getTimeinTimeoutObjects();
-  for (var i = 0; i < times.length; i++) {
-    if (times[i].timein === timeinList.value) {
-      timeoutList.setAttribute('value', times[i].timeout);
-      break;
-    }
-  }
+  var timeIn = document.querySelector('#timein').value;
+  timeoutList.setAttribute('value', timeIn);
+
 };
 
 // sinchronize timeout timein values
 var sinchronizeTimeinForTimeout = function () {
-  var times = getTimeinTimeoutObjects();
-  for (var i = 0; i < times.length; i++) {
-    if (times[i].timeout === timeoutList.value) {
-      timeinList.setAttribute('value', times[i].timein);
-      break;
-    }
-  }
+  var timeOut = document.querySelector('#timeout').value;
+  timeinList.setAttribute('value', timeOut);
 };
 
 
