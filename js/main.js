@@ -164,28 +164,6 @@ setPinStartPosition();
 
 mainPinElement.addEventListener('mouseup', setPinPosition);
 
-// get objects for accomodations (type and minprice)
-/* var getAccomodations = function () {
-  var accomodations = [];
-  for (var i = 0; i < TYPES.length; i++) {
-    accomodations[i] = {'type': TYPES[i],
-      'minPrice': MIN_PRICES[i]
-    };
-  }
-  return accomodations;
-}; */
-
-// get element from array with type == type
-/* var getAccomodationsIndex = function (type) {
-  var accArray = getAccomodations();
-  for (var i = 0; i < accArray.length; i++) {
-    if (accArray[i].type === type) {
-      var index = i;
-      break;
-    }
-  }
-  return index;
-}; */
 
 var accomList = document.querySelector('#type');
 // set to value -> min price
@@ -203,17 +181,7 @@ accomList.addEventListener('change', setMinPrice);
 //
 
 // to get timein timeout values
-var getTimeinTimeoutObjects = function () {
-  var timeinOptions = document.querySelector('#timein')
- .querySelectorAll('option');
-  var timeoutOptions = document.querySelector('#timeout')
-.querySelectorAll('option');
-  var timeValues = [];
-  for (var i = 0; i < timeinOptions.length; i++) {
-    timeValues[i] = {'timein': timeinOptions[i].value, 'timeout': timeoutOptions[i].value};
-  }
-  return timeValues;
-};
+
 
 var timeinList = document.querySelector('#timein');
 var timeoutList = document.querySelector('#timeout');
