@@ -7,7 +7,14 @@ var MAIN_PIN_SIZE = 68;
 var MAIN_PIN_OFFSET_X = 34;
 var MAIN_PIN_OFFSET_Y = 90;
 var ARRAY_SIZE = 8;
-var TYPES = ['palace', 'flat', 'house ', 'bungalo'];
+var TYPES = ['palace', 'flat', 'house', 'bungalo'];
+// var MIN_PRICES = [10000, 1000, 5000, 0];
+var ACCOMODATION_MIN_PRICES = {
+  palace: 10000,
+  flat: 1000,
+  house: 5000,
+  bungalo: 0
+};
 
 var getAvatars = function () {
   var avatars = [];
@@ -54,19 +61,6 @@ var getAdvertismentArray = function () {
 var pins = getAdvertismentArray();
 
 
-// remove map--fadded
-var activateMap = function () {
-  var elementMap = document.querySelector('.map');
-  elementMap.classList.remove('map--faded');
-};
-
-// remove ad-form--disabled;
-var activateAdvertForm = function () {
-  var adFormElement = document.querySelector('.ad-form');
-  adFormElement.classList.remove('ad-form--disabled');
-};
-
-
 var pinTemplate = document.querySelector('#pin')
 .content
 .querySelector('.map__pin');
@@ -82,36 +76,67 @@ var renderPin = function (pin) {
   return pinElement;
 };
 
+var addPinsToMap = function () {
+  var fragment = document.createDocumentFragment();
+  for (var i = 0; i < pins.length; i++) {
+    fragment.appendChild(renderPin(pins[i]));
+  }
+  var elementMap = document.querySelector('.map');
+  elementMap.appendChild(fragment);
+};
 
-var fragment = document.createDocumentFragment();
-for (var i = 0; i < pins.length; i++) {
-  fragment.appendChild(renderPin(pins[i]));
-}
-var elementMap = document.querySelector('.map');
-elementMap.appendChild(fragment);
+// remove map--fadded
+var activateMap = function () {
+  var elementMap = document.querySelector('.map');
+  elementMap.classList.remove('map--faded');
+};
+
+// remove ad-form--disabled;
+var activateAdvertForm = function () {
+  var adFormElement = document.querySelector('.ad-form');
+  adFormElement.classList.remove('ad-form--disabled');
+};
+
+
+// disable filters form
+var disableFilters = function (isDisabled) {
+  var filtersFormElem = document.querySelectorAll('.map__filter');
+  for (var i = 0; i < filtersFormElem.length; i++) {
+    filtersFormElem[i].disabled = isDisabled;
+  }
+};
+
+var enableFilters = function () {
+  disableFilters(false);
+};
+
 
 // disable fieldsets
 var disableFieldsets = function () {
   var fieldSets = document.querySelectorAll('fieldset');
-  for (i = 0; i < fieldSets.length; i++) {
+  for (var i = 0; i < fieldSets.length; i++) {
     fieldSets[i].disabled = true;
   }
 };
 
 var enableFieldsets = function () {
   var fieldSets = document.querySelectorAll('fieldset');
-  for (i = 0; i < fieldSets.length; i++) {
+  for (var i = 0; i < fieldSets.length; i++) {
     fieldSets[i].disabled = false;
   }
 };
 
 disableFieldsets();
+disableFilters(true);
 
 // add event listener to .map__pin--main.
 var mainPinElement = document.querySelector('.map__pin--main');
 mainPinElement.addEventListener('click', enableFieldsets);
 mainPinElement.addEventListener('click', activateMap);
 mainPinElement.addEventListener('click', activateAdvertForm);
+mainPinElement.addEventListener('click', enableFilters);
+mainPinElement.addEventListener('click', addPinsToMap);
+
 
 // function to get address of pin
 
@@ -138,3 +163,42 @@ setPinStartPosition();
 
 
 mainPinElement.addEventListener('mouseup', setPinPosition);
+
+
+var accomList = document.querySelector('#type');
+// set to value -> min price
+var setMinPrice = function () {
+  var priceElem = document.querySelector('#price');
+  var priceValue = ACCOMODATION_MIN_PRICES[accomList.value];
+  priceElem.setAttribute('placeholder', priceValue);
+  priceElem.setAttribute('min', priceValue);
+};
+
+setMinPrice();
+accomList.addEventListener('change', setMinPrice);
+
+
+//
+
+// to get timein timeout values
+
+
+var timeinList = document.querySelector('#timein');
+var timeoutList = document.querySelector('#timeout');
+
+// sinchronize timein timeout values
+var sinchronizeTimeoutForTimein = function () {
+  var timeIn = document.querySelector('#timein').value;
+  timeoutList.setAttribute('value', timeIn);
+
+};
+
+// sinchronize timeout timein values
+var sinchronizeTimeinForTimeout = function () {
+  var timeOut = document.querySelector('#timeout').value;
+  timeinList.setAttribute('value', timeOut);
+};
+
+
+timeinList.addEventListener('change', sinchronizeTimeoutForTimein);
+timeoutList.addEventListener('change', sinchronizeTimeinForTimeout);
