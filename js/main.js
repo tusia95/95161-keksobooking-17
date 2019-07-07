@@ -161,7 +161,7 @@ var setPinPosition = function () {
 
 setPinStartPosition();
 
-
+// set min after mouse click
 mainPinElement.addEventListener('mouseup', setPinPosition);
 
 
@@ -199,6 +199,6 @@ var sinchronizeTimeinForTimeout = function () {
   timeinList.setAttribute('value', timeOut);
 };
 
-
+//add sinchronization to fields
 timeinList.addEventListener('change', sinchronizeTimeoutForTimein);
 timeoutList.addEventListener('change', sinchronizeTimeinForTimeout);
