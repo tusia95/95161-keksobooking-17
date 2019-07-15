@@ -7,6 +7,7 @@ var MAIN_PIN_SIZE = 68;
 var MAIN_PIN_OFFSET_X = 34;
 var MAIN_PIN_OFFSET_Y = 90;
 var ARRAY_SIZE = 8;
+var MAX_COUNTER_VALUE = 2;
 var TYPES = ['palace', 'flat', 'house', 'bungalo'];
 // var MIN_PRICES = [10000, 1000, 5000, 0];
 var ACCOMODATION_MIN_PRICES = {
@@ -152,7 +153,9 @@ mainPinElement.addEventListener('mousedown', function (evt) {
   var onMouseMove = function (moveEvt) {
     moveEvt.preventDefault();
     dragged = true;
-    moveCount++;
+    if (moveCount < MAX_COUNTER_VALUE) {
+      moveCount++;
+    }
 
     var shift = {
       x: startCoords.x - moveEvt.clientX,
