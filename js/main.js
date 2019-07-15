@@ -130,12 +130,79 @@ disableFieldsets();
 disableFilters(true);
 
 // add event listener to .map__pin--main.
+
+
 var mainPinElement = document.querySelector('.map__pin--main');
-mainPinElement.addEventListener('click', enableFieldsets);
-mainPinElement.addEventListener('click', activateMap);
-mainPinElement.addEventListener('click', activateAdvertForm);
-mainPinElement.addEventListener('click', enableFilters);
-mainPinElement.addEventListener('click', addPinsToMap);
+var moveCount = 0;
+
+
+//  drug and drop for main pin
+
+
+mainPinElement.addEventListener('mousedown', function (evt) {
+  evt.preventDefault();
+
+  var startCoords = {
+    x: evt.clientX,
+    y: evt.clientY
+  };
+
+  var dragged = false;
+
+  var onMouseMove = function (moveEvt) {
+    moveEvt.preventDefault();
+    dragged = true;
+    moveCount++;
+
+    var shift = {
+      x: startCoords.x - moveEvt.clientX,
+      y: startCoords.y - moveEvt.clientY
+    };
+
+    startCoords = {
+      x: moveEvt.clientX,
+      y: moveEvt.clientY
+    };
+
+    var newTop = mainPinElement.offsetTop - shift.y;
+    var newLeft = mainPinElement.offsetLeft - shift.x;
+    console.log(mapWidth);
+    if ((newTop > MIN_Y - MAIN_PIN_OFFSET_Y && newTop < MAX_Y - MAIN_PIN_OFFSET_Y) && (newLeft > -MAIN_PIN_OFFSET_X && newLeft < mapWidth - MAIN_PIN_OFFSET_X)) {
+      mainPinElement.style.top = newTop + 'px';
+      mainPinElement.style.left = newLeft + 'px';
+      setPinPosition();
+    }
+    // add on mouse move: form activation
+    if (moveCount === 1) {
+      enableFieldsets();
+      activateMap();
+      activateAdvertForm();
+      enableFilters();
+      addPinsToMap();
+    }
+  };
+
+
+  var onMouseUp = function (upEvt) {
+    upEvt.preventDefault();
+
+    document.removeEventListener('mousemove', onMouseMove);
+    document.removeEventListener('mouseup', onMouseUp);
+    if (dragged) {
+      var onClickPreventDefault = function (clickEvt) {
+        clickEvt.preventDefault();
+        mainPinElement.removeEventListener('click', onClickPreventDefault);
+        setPinPosition();
+      };
+      mainPinElement.addEventListener('click', onClickPreventDefault);
+    }
+  };
+
+  document.addEventListener('mousemove', onMouseMove);
+
+  document.addEventListener('mouseup', onMouseUp);
+
+});
 
 
 // function to get address of pin
@@ -199,6 +266,6 @@ var sinchronizeTimeinForTimeout = function () {
   timeinList.setAttribute('value', timeOut);
 };
 
-//add sinchronization to fields
+//  add sinchronization to fields
 timeinList.addEventListener('change', sinchronizeTimeoutForTimein);
 timeoutList.addEventListener('change', sinchronizeTimeinForTimeout);
