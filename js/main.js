@@ -166,7 +166,7 @@ mainPinElement.addEventListener('mousedown', function (evt) {
 
     var newTop = mainPinElement.offsetTop - shift.y;
     var newLeft = mainPinElement.offsetLeft - shift.x;
-    console.log(mapWidth);
+
     if ((newTop > MIN_Y - MAIN_PIN_OFFSET_Y && newTop < MAX_Y - MAIN_PIN_OFFSET_Y) && (newLeft > -MAIN_PIN_OFFSET_X && newLeft < mapWidth - MAIN_PIN_OFFSET_X)) {
       mainPinElement.style.top = newTop + 'px';
       mainPinElement.style.left = newLeft + 'px';
@@ -205,7 +205,7 @@ mainPinElement.addEventListener('mousedown', function (evt) {
 });
 
 
-// function to get address of pin
+// to get address of pin
 
 var getPinPosition = function (element, offsetX, offsetY) {
   var positionX = element.offsetLeft + offsetX;
