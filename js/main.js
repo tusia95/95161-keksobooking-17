@@ -257,18 +257,20 @@ var timeinList = document.querySelector('#timein');
 var timeoutList = document.querySelector('#timeout');
 
 // sinchronize timein timeout values
-var sinchronizeTimeoutForTimein = function () {
+/* var sinchronizeTimeoutForTimein = function () {
   var timeIn = document.querySelector('#timein').value;
   timeoutList.setAttribute('value', timeIn);
 
-};
+}; */
 
 // sinchronize timeout timein values
-var sinchronizeTimeinForTimeout = function () {
-  var timeOut = document.querySelector('#timeout').value;
-  timeinList.setAttribute('value', timeOut);
+var sinchronize = function (evt) {
+  if (evt.target.closest('#timein')) {
+    timeoutList.value = timeinList.value;
+  }
+  timeinList.value = timeoutList.value;
 };
 
 //  add sinchronization to fields
-timeinList.addEventListener('change', sinchronizeTimeoutForTimein);
-timeoutList.addEventListener('change', sinchronizeTimeinForTimeout);
+timeinList.addEventListener('change', sinchronize);
+timeoutList.addEventListener('change', sinchronize);
