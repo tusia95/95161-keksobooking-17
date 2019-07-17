@@ -7,6 +7,7 @@ var MAIN_PIN_SIZE = 68;
 var MAIN_PIN_OFFSET_X = 34;
 var MAIN_PIN_OFFSET_Y = 90;
 var ARRAY_SIZE = 8;
+var MAX_COUNTER_VALUE = 2;
 var TYPES = ['palace', 'flat', 'house', 'bungalo'];
 // var MIN_PRICES = [10000, 1000, 5000, 0];
 var ACCOMODATION_MIN_PRICES = {
@@ -130,15 +131,84 @@ disableFieldsets();
 disableFilters(true);
 
 // add event listener to .map__pin--main.
+
+
 var mainPinElement = document.querySelector('.map__pin--main');
-mainPinElement.addEventListener('click', enableFieldsets);
-mainPinElement.addEventListener('click', activateMap);
-mainPinElement.addEventListener('click', activateAdvertForm);
-mainPinElement.addEventListener('click', enableFilters);
-mainPinElement.addEventListener('click', addPinsToMap);
+var moveCount = 0;
 
 
-// function to get address of pin
+//  drug and drop for main pin
+
+
+mainPinElement.addEventListener('mousedown', function (evt) {
+  evt.preventDefault();
+
+  var startCoords = {
+    x: evt.clientX,
+    y: evt.clientY
+  };
+
+  var dragged = false;
+
+  var onMouseMove = function (moveEvt) {
+    moveEvt.preventDefault();
+    dragged = true;
+    if (moveCount < MAX_COUNTER_VALUE) {
+      moveCount++;
+    }
+
+    var shift = {
+      x: startCoords.x - moveEvt.clientX,
+      y: startCoords.y - moveEvt.clientY
+    };
+
+    startCoords = {
+      x: moveEvt.clientX,
+      y: moveEvt.clientY
+    };
+
+    var newTop = mainPinElement.offsetTop - shift.y;
+    var newLeft = mainPinElement.offsetLeft - shift.x;
+
+    if ((newTop > MIN_Y - MAIN_PIN_OFFSET_Y && newTop < MAX_Y - MAIN_PIN_OFFSET_Y) && (newLeft > -MAIN_PIN_OFFSET_X && newLeft < mapWidth - MAIN_PIN_OFFSET_X)) {
+      mainPinElement.style.top = newTop + 'px';
+      mainPinElement.style.left = newLeft + 'px';
+      setPinPosition();
+    }
+    // add on mouse move: form activation
+    if (moveCount === 1) {
+      enableFieldsets();
+      activateMap();
+      activateAdvertForm();
+      enableFilters();
+      addPinsToMap();
+    }
+  };
+
+
+  var onMouseUp = function (upEvt) {
+    upEvt.preventDefault();
+
+    document.removeEventListener('mousemove', onMouseMove);
+    document.removeEventListener('mouseup', onMouseUp);
+    if (dragged) {
+      var onClickPreventDefault = function (clickEvt) {
+        clickEvt.preventDefault();
+        mainPinElement.removeEventListener('click', onClickPreventDefault);
+        setPinPosition();
+      };
+      mainPinElement.addEventListener('click', onClickPreventDefault);
+    }
+  };
+
+  document.addEventListener('mousemove', onMouseMove);
+
+  document.addEventListener('mouseup', onMouseUp);
+
+});
+
+
+// to get address of pin
 
 var getPinPosition = function (element, offsetX, offsetY) {
   var positionX = element.offsetLeft + offsetX;
@@ -187,18 +257,20 @@ var timeinList = document.querySelector('#timein');
 var timeoutList = document.querySelector('#timeout');
 
 // sinchronize timein timeout values
-var sinchronizeTimeoutForTimein = function () {
+/* var sinchronizeTimeoutForTimein = function () {
   var timeIn = document.querySelector('#timein').value;
   timeoutList.setAttribute('value', timeIn);
 
-};
+}; */
 
 // sinchronize timeout timein values
-var sinchronizeTimeinForTimeout = function () {
-  var timeOut = document.querySelector('#timeout').value;
-  timeinList.setAttribute('value', timeOut);
+var sinchronize = function (evt) {
+  if (evt.target.closest('#timein')) {
+    timeoutList.value = timeinList.value;
+  }
+  timeinList.value = timeoutList.value;
 };
 
-//add sinchronization to fields
-timeinList.addEventListener('change', sinchronizeTimeoutForTimein);
-timeoutList.addEventListener('change', sinchronizeTimeinForTimeout);
+//  add sinchronization to fields
+timeinList.addEventListener('change', sinchronize);
+timeoutList.addEventListener('change', sinchronize);
