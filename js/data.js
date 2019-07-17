@@ -6,7 +6,7 @@
   var MAX_Y = 630;
   var getAvatars = function () {
     var avatars = [];
-    for (var i = 1; i <= window.ARRAY_SIZE; i++) {
+    for (var i = 1; i <= window.utils.arSize; i++) {
       var avatarIndex = i;
       avatars.push('img/avatars/user0' + avatarIndex + '.png');
       // img/avatars/user{{xx}}.png
@@ -36,7 +36,7 @@
 
   var getAdvertismentArray = function () {
     var advertismentsArray = [];
-    for (var i = 0; i < window.ARRAY_SIZE; i++) {
+    for (var i = 0; i < window.utils. arSize; i++) {
       advertismentsArray.push(getAdvertisment(i));
     }
     return advertismentsArray;
