@@ -57,7 +57,7 @@
 
   var enableFilters = function () {
     disableFilters(false);
-};
+  };
 
 
   // disable fieldsets
