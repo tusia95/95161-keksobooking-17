@@ -11,7 +11,6 @@
 .content
 .querySelector('.map__pin');
 
-
   var renderPin = function (pin) {
     var pinElement = pinTemplate.cloneNode(true);
     pinElement.style.left = pin.location.x + PIN_OFFSET_X + 'px';
@@ -22,19 +21,37 @@
     return pinElement;
   };
 
-  var pins = window.data.getAdvertismentArray();
+  var messageTemplate = document.querySelector('#error')
+.content
+.querySelector('.error__message');
 
-  var addPinsToMap = function () {
+  var errorTemplate = document.querySelector('#error')
+  .content
+  .querySelector('.error');
+
+  var errorHandler = function (message) {
+    var errorElement = errorTemplate.cloneNode(true);
+    messageTemplate.textContent = message;
     var fragment = document.createDocumentFragment();
-    for (var i = 0; i < pins.length; i++) {
+    fragment.appendChild(errorElement);
+    var elementMain = document.querySelector('main');
+    elementMain.insertAdjacentElement('afterbegin', errorElement);
+
+  };
+
+  // var pins = window.data.getAdvertismentArray();
+
+  var addPinsToMap = function (pins) {
+    var fragment = document.createDocumentFragment();
+    for (var i = 0; i < window.utils.arSize; i++) {
       fragment.appendChild(renderPin(pins[i]));
     }
     var elementMap = document.querySelector('.map');
     elementMap.appendChild(fragment);
   };
+
   var mainPinElement = document.querySelector('.map__pin--main');
   var moveCount = 0;
-
 
   //  drug and drop for main pin
 
@@ -69,18 +86,18 @@
       var newTop = mainPinElement.offsetTop - shift.y;
       var newLeft = mainPinElement.offsetLeft - shift.x;
 
-      if ((newTop > window.utils.miny - MAIN_PIN_OFFSET_Y && newTop < window.utils.maxy - MAIN_PIN_OFFSET_Y) && (newLeft > -MAIN_PIN_OFFSET_X && newLeft < window.data.mapWidth - MAIN_PIN_OFFSET_X)) {
+      if ((newTop > window.utils.miny - MAIN_PIN_OFFSET_Y && newTop < window.utils.maxy - MAIN_PIN_OFFSET_Y) && (newLeft > -MAIN_PIN_OFFSET_X && newLeft < window.map.mapWidth - MAIN_PIN_OFFSET_X)) {
         mainPinElement.style.top = newTop + 'px';
         mainPinElement.style.left = newLeft + 'px';
         setPinPosition();
       }
       // add on mouse move: form activation
       if (moveCount === 1) {
+        window.load(addPinsToMap, errorHandler);
         window.form.enableFieldsets();
         window.map.activateMap();
         window.form.activateAdvertForm();
         window.form.enableFilters();
-        addPinsToMap();
       }
     };
 
