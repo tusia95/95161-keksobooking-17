@@ -49,7 +49,7 @@
   };
 
   var filterForTypePins = function (accomType) {
-    // window.renderPins();  
+    // window.renderPins();
     var sameAccomTypePins = loadedPins.filter(function (it) {
       return it.offer.type === accomType;
     });
