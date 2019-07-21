@@ -39,22 +39,59 @@
 
   };
 
-  // var pins = window.data.getAdvertismentArray();
+  // filtering
+  var loadedPins = [];
 
-  var addPinsToMap = function (pins) {
+  var successHandler = function (data) {
+    loadedPins = data;
+    var filteredPins = data.slice(0, window.utils.numberPins);
+    renderPins(filteredPins);
+  };
+
+  var filterForTypePins = function (accomType) {
+    // window.renderPins();  
+    var sameAccomTypePins = loadedPins.filter(function (it) {
+      return it.offer.type === accomType;
+    });
+    window.pin.renderPins(sameAccomTypePins);
+  };
+
+  var houseTypeList = document.querySelector('#housing-type');
+
+  var onHouseTypeChange = function () {
+    removePins();
+    var accomType = houseTypeList.value;
+    filterForTypePins(accomType);
+  };
+
+  var removePins = function () {
+    var pins = document.querySelectorAll('.map__pin');
+    pins.forEach(function (element) {
+      element.remove();
+    });
+  };
+
+  houseTypeList.addEventListener('change', onHouseTypeChange);
+
+  // show pins on map
+  var renderPins = function (pins) {
     var fragment = document.createDocumentFragment();
-    for (var i = 0; i < window.utils.arSize; i++) {
+    for (var i = 0; i < pins.length; i++) {
       fragment.appendChild(renderPin(pins[i]));
     }
     var elementMap = document.querySelector('.map');
     elementMap.appendChild(fragment);
   };
 
+  window.pin = {renderPins: renderPins,
+    errorHandler: errorHandler,
+    loadedPins: loadedPins
+  };
+
   var mainPinElement = document.querySelector('.map__pin--main');
   var moveCount = 0;
 
   //  drug and drop for main pin
-
 
   mainPinElement.addEventListener('mousedown', function (evt) {
     evt.preventDefault();
@@ -93,7 +130,7 @@
       }
       // add on mouse move: form activation
       if (moveCount === 1) {
-        window.load(addPinsToMap, errorHandler);
+        window.load(successHandler, errorHandler);
         window.form.enableFieldsets();
         window.map.activateMap();
         window.form.activateAdvertForm();
