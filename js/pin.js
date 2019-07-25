@@ -40,6 +40,7 @@
   };
 
   // filtering
+
   var loadedPins = [];
 
   var successHandler = function (data) {
@@ -48,20 +49,11 @@
     renderPins(filteredPins);
   };
 
-  var filterForTypePins = function (accomType) {
-    // window.renderPins();
-    var sameAccomTypePins = loadedPins.filter(function (it) {
-      return it.offer.type === accomType;
-    });
-    renderPins(sameAccomTypePins);
-  };
-
-  var houseTypeList = document.querySelector('#housing-type');
 
   var onHouseTypeChange = function () {
     removePins();
     var accomType = houseTypeList.value;
-    filterForTypePins(accomType);
+    window.filtering.filterFotTypePins(accomType, renderPins, loadedPins);
   };
 
   var removePins = function () {
