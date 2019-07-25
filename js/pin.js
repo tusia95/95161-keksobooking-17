@@ -39,22 +39,50 @@
 
   };
 
-  // var pins = window.data.getAdvertismentArray();
+  // filtering
 
-  var addPinsToMap = function (pins) {
+  var loadedPins = [];
+
+  var successHandler = function (data) {
+    loadedPins = data;
+    var slicedPins = data.slice(0, window.utils.numberPins);
+    renderPins(slicedPins);
+  };
+
+
+  var onHouseTypeChange = function () {
+    removePins();
+    var accomType = houseTypeList.value;
+    window.filtering.filterFotTypePins(accomType, renderPins, loadedPins);
+  };
+
+  var removePins = function () {
+    var pins = document.querySelectorAll('.map__pin');
+    pins.forEach(function (element) {
+      if (!element.classList.contains('map__pin--main')) {
+        element.remove();
+      }
+    });
+  };
+  var houseTypeList = document.querySelector('#housing-type');
+
+  houseTypeList.addEventListener('change', onHouseTypeChange);
+
+  // show pins on map
+  var renderPins = function (pins) {
     var fragment = document.createDocumentFragment();
-    for (var i = 0; i < window.utils.arSize; i++) {
+    for (var i = 0; i < pins.length; i++) {
       fragment.appendChild(renderPin(pins[i]));
     }
     var elementMap = document.querySelector('.map');
     elementMap.appendChild(fragment);
   };
 
+
   var mainPinElement = document.querySelector('.map__pin--main');
   var moveCount = 0;
 
   //  drug and drop for main pin
-
 
   mainPinElement.addEventListener('mousedown', function (evt) {
     evt.preventDefault();
@@ -93,7 +121,7 @@
       }
       // add on mouse move: form activation
       if (moveCount === 1) {
-        window.load(addPinsToMap, errorHandler);
+        window.load(successHandler, errorHandler);
         window.form.enableFieldsets();
         window.map.activateMap();
         window.form.activateAdvertForm();
@@ -149,4 +177,9 @@
 
   // set pin after mouse click
   mainPinElement.addEventListener('mouseup', setPinPosition);
+
+  window.pin = {renderPins: renderPins,
+    errorHandler: errorHandler,
+    loadedPins: loadedPins
+  };
 })();
