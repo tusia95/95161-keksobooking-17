@@ -45,8 +45,8 @@
 
   var successHandler = function (data) {
     loadedPins = data;
-    var filteredPins = data.slice(0, window.utils.numberPins);
-    renderPins(filteredPins);
+    var slicedPins = data.slice(0, window.utils.numberPins);
+    renderPins(slicedPins);
   };
 
 
@@ -66,7 +66,7 @@
   };
   var houseTypeList = document.querySelector('#housing-type');
 
-  houseTypeList.addEventListener('change', onHouseTypeChange); 
+  houseTypeList.addEventListener('change', onHouseTypeChange);
 
   // show pins on map
   var renderPins = function (pins) {
