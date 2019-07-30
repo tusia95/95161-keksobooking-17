@@ -48,18 +48,13 @@
     var typeElement = advertElement.querySelector('.popup__type');
     var capacityElement = advertElement.querySelector('.popup__text--capacity');
     var timeElement = advertElement.querySelector('.popup__text--time');
-    var featuresListElement = advertElement.querySelector('.popup__features');
+    var featuresList = advertElement.querySelector('.popup__features');
     var descriptionElement = advertElement.querySelector('.popup__description');
     var photosElement = advertElement.querySelector('.popup__photo');
 
-    var featurewWifi = featuresListElement.querySelector('.popup__feature--wifi');
-    var featurewDishWasher = featuresListElement.querySelector('.popup__feature--dishwasher');
-    var featurewParking = featuresListElement.querySelector('.popup__feature--parking');
-    var featurewWasher = featuresListElement.querySelector('.popup__feature--washer');
-    var featureElevator = featuresListElement.querySelector('.popup__feature--elevator');
-    var featureCondition = featuresListElement.querySelector('.popup__feature--conditioner');
-    var featuresElements = {wifi: featurewWifi, dishwasher: featurewDishWasher, parking: featurewParking, washer: featurewWasher,
-      elevator: featureElevator, conditioner: featureCondition};
+    pin.offer.features.forEach(function (it) {
+      addFeature(featuresList, it);
+    });
     avatarElement.src = pin.author.avatar;
     titleElement.textContent = pin.offer.title;
     addressElement.textContent = pin.offer.address;
@@ -67,17 +62,20 @@
     typeElement.textContent = getAccomodationType(pin.offer.type);
     capacityElement.textContent = pin.offer.rooms + ' комнаты для ' + pin.offer.guests + ' гостей.';
     timeElement.textContent = 'Заезд после ' + pin.offer.checkin + ', выезд до ' + pin.offer.checkout;
-    // find fetures wich aren`t in current accomodation
-    var diff = FEATURES.filter(function (elem) {
-      return pin.offer.features.indexOf(elem) < 0;
-    });
-    for (var i = 0; i < diff.length; i++) {
-      featuresElements[diff[i]].remove(); // delete fetures elements wich aren`t in current accomodation
-    }
     descriptionElement.textContent = pin.offer.description;
     photosElement.src = pin.offer.photos;
     // avtarElement.alt = 'advertisment name';
     return advertElement;
+  };
+
+  var renderAdverts = function (pins) {
+    var fragment = document.createDocumentFragment();
+    for (var i = 0; i < 1; i++) {
+      fragment.appendChild(renderAdvert(pins[0]));
+    }
+    var elementMap = document.querySelector('.map');
+    var elementMapFilters = document.querySelector('.map__filters-container');
+    elementMap.insertBefore(fragment, elementMapFilters);
   };
 
   var getAccomodationType = function (type) {
@@ -97,14 +95,28 @@
     return rusType;
   };
 
-  var renderAdverts = function (pins) {
-    var fragment = document.createDocumentFragment();
-    for (var i = 0; i < 1; i++) {
-      fragment.appendChild(renderAdvert(pins[0]));
+  var addFeature = function (container, data) { // funct let li = document.createElement("li");
+    var feature = document.createElement('li');
+    switch (data) {
+      case FEATURES[0]:
+        feature.classList.add('popup__feature--wifi');
+        break;
+      case FEATURES[1]:
+        feature.classList.add('popup__feature--dishwasher');
+        break;
+      case FEATURES[2]:
+        feature.classList.add('.popup__feature--parking');
+        break;
+      case FEATURES[3]:
+        feature.classList.add('.popup__feature--washer');
+        break;
+      case FEATURES[4]:
+        feature.classList.add('.popup__feature--elevator');
+        break;
+      case FEATURES[5]:
+        feature.classList.add('.popup__feature--conditioner');
+        break;
     }
-    var elementMap = document.querySelector('.map');
-    var elementMapFilters = document.querySelector('.map__filters-container');
-    elementMap.insertBefore(fragment, elementMapFilters);
   };
 
 
