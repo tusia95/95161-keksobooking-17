@@ -20,17 +20,19 @@
     var avatarElement = pinElement.querySelector('img');
     avatarElement.src = pin.author.avatar;
     avatarElement.alt = 'advertisment name';
-    return pinElement;
+    var elementMapPins = document.querySelector('.map__pins');
+    var fragment = document.createDocumentFragment();
+    fragment.appendChild(pinElement);
+    elementMapPins.appendChild(fragment);
+    addOnPinClickListener(pinElement, pin);
+    // return pinElement;
   };
 
-    // show pins on map
+  // show pins on map
   var renderPins = function (pins) {
-    var fragment = document.createDocumentFragment();
     for (var i = 0; i < pins.length; i++) {
-      fragment.appendChild(renderPin(pins[i]));
+      renderPin(pins[i]);
     }
-    var elementMap = document.querySelector('.map');
-    elementMap.appendChild(fragment);
   };
 
     // render Advertisment
@@ -65,17 +67,27 @@
     descriptionElement.textContent = pin.offer.description;
     photosElement.src = pin.offer.photos;
     // avtarElement.alt = 'advertisment name';
-    return advertElement;
-  };
-
-  var renderAdverts = function (pins) {
     var fragment = document.createDocumentFragment();
-    for (var i = 0; i < 1; i++) {
-      fragment.appendChild(renderAdvert(pins[0]));
-    }
+    fragment.appendChild(advertElement);
     var elementMap = document.querySelector('.map');
     var elementMapFilters = document.querySelector('.map__filters-container');
     elementMap.insertBefore(fragment, elementMapFilters);
+
+    var closePopupElement = document.querySelector('.popup__close');
+    closePopupElement.addEventListener('click', function () {
+      removeAdvert(advertElement);
+    });
+    window.addEventListener('keydown', function (evt) {
+      if (evt.keyCode === 27) {
+        removeAdvert(advertElement);
+      }
+    });
+  };
+
+  var removeAdvert = function (element) {
+    if (element) {
+      element.remove();
+    }
   };
 
   var getAccomodationType = function (type) {
@@ -95,7 +107,7 @@
     return rusType;
   };
 
-  var addFeature = function (container, data) { // funct let li = document.createElement("li");
+  var addFeature = function (container, data) {
     var feature = document.createElement('li');
     switch (data) {
       case FEATURES[0]:
@@ -146,7 +158,9 @@
     loadedPins = data;
     var slicedPins = data.slice(0, window.utils.numberPins);
     renderPins(slicedPins);
-    renderAdverts(loadedPins);
+    // showAdvert();
+    // renderAdvert(loadedPins[1]);
+    // addListenersOnPins();
   };
 
 
@@ -265,6 +279,17 @@
 
   // set pin after mouse click
   mainPinElement.addEventListener('mouseup', setPinPosition);
+
+
+  // to open advert when click pin
+
+  var addOnPinClickListener = function (element, data) {
+    element.addEventListener('click', function () {
+      element = document.querySelector('.map__card');
+      removeAdvert(element);
+      renderAdvert(data);
+    });
+  };
 
   window.pin = {renderPins: renderPins,
     errorHandler: errorHandler,
