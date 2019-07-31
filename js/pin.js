@@ -108,7 +108,7 @@
       element.remove();
     }
   };
-
+  // need to move in another module
   var getAccomodationType = function (type) {
     var rusType = null;
     switch (type) {
