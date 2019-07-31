@@ -91,20 +91,17 @@
     closePopupElement.addEventListener('click', function () {
       removeAdvert(advertElement);
     });
-
-    document.addEventListener('keydown', escAdverHandler);
     var element = advertElement;
-    var escAdverHandler = function (evt) {
+    var escAdvertHandler = function (evt) {
       if (evt.keyCode === 27) {
         removeAdvert(element);
-        document.removeEventListener('keydown', escAdverHandler);
+        document.removeEventListener('keydown', escAdvertHandler);
       }
     };
-  };
-    //
 
-    // removeAdvert(advertElement);
-    // this.window.removeEventListener('keydown',)
+    document.addEventListener('keydown', escAdvertHandler);
+
+  };
 
   var removeAdvert = function (element) {
     if (element) {
@@ -131,25 +128,25 @@
 
   var addFeature = function (container, data) {
     var feature = document.createElement('li');
-    feature.classList.add('.popup__feature');
+    feature.classList.add('popup__feature');
     switch (data) {
       case FEATURES[0]:
-        feature.classList.add('.popup__feature--wifi');
+        feature.classList.add('popup__feature--wifi');
         break;
       case FEATURES[1]:
-        feature.classList.add('.popup__feature--dishwasher');
+        feature.classList.add('popup__feature--dishwasher');
         break;
       case FEATURES[2]:
-        feature.classList.add('.popup__feature--parking');
+        feature.classList.add('popup__feature--parking');
         break;
       case FEATURES[3]:
-        feature.classList.add('.popup__feature--washer');
+        feature.classList.add('popup__feature--washer');
         break;
       case FEATURES[4]:
-        feature.classList.add('.popup__feature--elevator');
+        feature.classList.add('popup__feature--elevator');
         break;
       case FEATURES[5]:
-        feature.classList.add('.popup__feature--conditioner');
+        feature.classList.add('popup__feature--conditioner');
         break;
     }
     container.appendChild(feature);
