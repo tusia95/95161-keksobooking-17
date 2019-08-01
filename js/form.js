@@ -147,4 +147,5 @@
   disableFieldsets();
   // activateAdvertForm();
   disableFilters(true);
+  sinchronizeGuestForRooms();
 })();
