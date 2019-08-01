@@ -89,12 +89,12 @@
 
     var closePopupElement = document.querySelector('.popup__close');
     closePopupElement.addEventListener('click', function () {
-      removeAdvert(advertElement);
+      removeAdvert();
     });
-    var element = advertElement;
+    // var element = advertElement;
     var escAdvertHandler = function (evt) {
       if (evt.keyCode === 27) {
-        removeAdvert(element);
+        removeAdvert();
         document.removeEventListener('keydown', escAdvertHandler);
       }
     };
@@ -103,9 +103,10 @@
 
   };
 
-  var removeAdvert = function (element) {
-    if (element) {
-      element.remove();
+  var removeAdvert = function () {
+    var advertElement = document.querySelector('.map__card');
+    if (advertElement) {
+      advertElement.remove();
     }
   };
 
@@ -301,6 +302,11 @@
     addressElem.value = position.x + ', ' + position.y;
   };
 
+  var setMainPinToDefaultPlace = function () {
+    mainPinElement.style.top = '375px';
+    mainPinElement.style.left = '570px';
+  };
+
   var setPinPosition = function () {
     var addressElem = document.querySelector('#address');
     var position = getPinPosition(mainPinElement, MAIN_PIN_OFFSET_X, MAIN_PIN_OFFSET_Y);
@@ -325,6 +331,11 @@
 
   window.pin = {renderPins: renderPins,
     errorHandler: errorHandler,
-    loadedPins: loadedPins
+    loadedPins: loadedPins,
+    removePins: removePins,
+    removeAdvert: removeAdvert,
+    types: TYPES,
+    setPinStartPosition: setPinStartPosition,
+    setMainPinToDefaultPlace: setMainPinToDefaultPlace
   };
 })();

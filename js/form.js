@@ -7,6 +7,13 @@
     bungalo: 0
   };
 
+  var FORM_DEFAULT_VALUES = {
+    type: 'flat',
+    rooms: '1',
+    capacity: '1',
+    time: '12:00',
+  };
+
   /* var ROOMS_NOTFOR_GUESTS = {
     1: ['2', '3', '0'],
     2: ['1', '2'],
@@ -65,24 +72,6 @@
         break;
     }
   };
-
-  /* var sinchronizeRoomsForGuests = function () {
-    // console.log(roomNumbersList.value);
-    switch (guestsNumberList.value) {
-      case '1':
-        validateList(roomsNumberList, '1', ['100']);
-        break;
-      case '2':
-        validateList(roomsNumberList, '2', ['1', '0']);
-        break;
-      case '3':
-        validateList(roomsNumberList, '3', ['1', '2', '0']);
-        break;
-      case '0':
-        validateList(roomsNumberList, '100', ['1', '2', '3']);
-        break;
-    }
-  };*/
 
   roomsNumberList.addEventListener('change', sinchronizeGuestForRooms);
   // guestsNumberList.addEventListener('change', sinchronizeRoomsForGuests);
@@ -148,4 +137,67 @@
   // activateAdvertForm();
   disableFilters(true);
   sinchronizeGuestForRooms();
+
+  // add listener to form submit btn
+  var advertForm = document.querySelector('.ad-form');
+
+  var uploadSuccessHandler = function (evt) {
+    window.upload(new FormData(advertForm), function () {
+      resetFormFields();
+    });
+    evt.preventDefault();
+  };
+
+
+  var resetFormFields = function () {
+    showSuccessUploadMessage();
+    advertForm.querySelector('#title').value = '';
+    advertForm.querySelector('#type').value = FORM_DEFAULT_VALUES.type;
+    advertForm.querySelector('#price').value = '';
+    advertForm.querySelector('#price').setAttribute('placeholder', ACCOMODATION_MIN_PRICES[FORM_DEFAULT_VALUES.type]);
+    advertForm.querySelector('#room_number').value = FORM_DEFAULT_VALUES.rooms;
+    advertForm.querySelector('#capacity').value = FORM_DEFAULT_VALUES.capacity;
+    advertForm.querySelector('#description').value = '';
+    advertForm.querySelector('#timein').value = FORM_DEFAULT_VALUES.time;
+    advertForm.querySelector('#timeout').value = FORM_DEFAULT_VALUES.time;
+    window.pin.setMainPinToDefaultPlace();
+    window.pin.setPinStartPosition();
+    var featureCheckboxes = advertForm.querySelector('.features').querySelector('input');
+    if (featureCheckboxes.getAttribute('checked')) {
+      featureCheckboxes.removeAttribute('checked');
+    }
+    window.pin.removePins();
+    window.pin.removeAdvert();
+
+  };
+
+  var showSuccessUploadMessage = function () {
+    var successTemplate = document.querySelector('#success')
+.content
+.querySelector('.success');
+    var messageElement = successTemplate.cloneNode(true);
+    var fragment = document.createDocumentFragment();
+    fragment.appendChild(messageElement);
+    advertForm.appendChild(fragment);
+  };
+
+  var removeSuccess = function () {
+    var success = document.querySelector('.success');
+    if (success) {
+      success.remove();
+    }
+  };
+
+  var escSuccessMessageHandler = function (evt) {
+    if (evt.keyCode === 27) {
+      removeSuccess();
+      document.removeEventListener('keydown', escSuccessMessageHandler);
+    }
+  };
+
+  window.addEventListener('keydown', escSuccessMessageHandler);
+  window.addEventListener('click', removeSuccess);
+
+  advertForm.addEventListener('submit', uploadSuccessHandler, window.pin.errorHandler);
+
 })();
