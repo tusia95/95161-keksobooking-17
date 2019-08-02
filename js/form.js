@@ -141,13 +141,12 @@
   // add listener to form submit btn
   var advertForm = document.querySelector('.ad-form');
 
-  var uploadSuccessHandler = function (evt) {
+  var uploadHandler = function (evt) {
     window.upload(new FormData(advertForm), function () {
       resetFormFields();
-    });
+    }, window.pin.errorHandler);
     evt.preventDefault();
   };
-
 
   var resetFormFields = function () {
     showSuccessUploadMessage();
@@ -162,10 +161,12 @@
     advertForm.querySelector('#timeout').value = FORM_DEFAULT_VALUES.time;
     window.pin.setMainPinToDefaultPlace();
     window.pin.setPinStartPosition();
-    var featureCheckboxes = advertForm.querySelector('.features').querySelector('input');
-    if (featureCheckboxes.getAttribute('checked')) {
-      featureCheckboxes.removeAttribute('checked');
-    }
+    var featureCheckboxes = advertForm.querySelector('.features').querySelectorAll('input');
+    featureCheckboxes.forEach(function (it) {
+      if (it.checked === true) {
+        it.checked = false;
+      }
+    });
     window.pin.removePins();
     window.pin.removeAdvert();
 
@@ -188,6 +189,11 @@
     }
   };
 
+  var clickSuccessMessageHandler = function () {
+    removeSuccess();
+    document.removeEventListener('click', clickSuccessMessageHandler);
+  };
+
   var escSuccessMessageHandler = function (evt) {
     if (evt.keyCode === 27) {
       removeSuccess();
@@ -195,9 +201,9 @@
     }
   };
 
-  window.addEventListener('keydown', escSuccessMessageHandler);
-  window.addEventListener('click', removeSuccess);
+  document.addEventListener('keydown', escSuccessMessageHandler);
+  document.addEventListener('click', clickSuccessMessageHandler);
 
-  advertForm.addEventListener('submit', uploadSuccessHandler, window.pin.errorHandler);
+  advertForm.addEventListener('submit', uploadHandler);
 
 })();

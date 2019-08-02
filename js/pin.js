@@ -180,8 +180,32 @@
     fragment.appendChild(errorElement);
     var elementMain = document.querySelector('main');
     elementMain.insertAdjacentElement('afterbegin', errorElement);
-
+    document.addEventListener('keydown', escErrorMessageHandler);
+    document.addEventListener('click', clickErrorMessageHandler);
+    document.querySelector('.error__button').addEventListener('click', removeError);
   };
+
+  var removeError = function () {
+    var error = document.querySelector('.error');
+    if (error) {
+      error.remove();
+    }
+  };
+
+  var clickErrorMessageHandler = function () {
+    removeError();
+    document.removeEventListener('click', clickErrorMessageHandler);
+  };
+
+  var escErrorMessageHandler = function (evt) {
+    if (evt.keyCode === 27) {
+      removeError();
+      document.removeEventListener('keydown', escErrorMessageHandler);
+    }
+  };
+
+
+
 
   // filtering
 
@@ -336,6 +360,6 @@
     removeAdvert: removeAdvert,
     types: TYPES,
     setPinStartPosition: setPinStartPosition,
-    setMainPinToDefaultPlace: setMainPinToDefaultPlace
+    setMainPinToDefaultPlace: setMainPinToDefaultPlace,
   };
 })();
