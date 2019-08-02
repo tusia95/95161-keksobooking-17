@@ -89,12 +89,12 @@
 
     var closePopupElement = document.querySelector('.popup__close');
     closePopupElement.addEventListener('click', function () {
-      removeAdvert(advertElement);
+      removeAdvert();
     });
-    var element = advertElement;
+    // var element = advertElement;
     var escAdvertHandler = function (evt) {
       if (evt.keyCode === 27) {
-        removeAdvert(element);
+        removeAdvert();
         document.removeEventListener('keydown', escAdvertHandler);
       }
     };
@@ -103,9 +103,10 @@
 
   };
 
-  var removeAdvert = function (element) {
-    if (element) {
-      element.remove();
+  var removeAdvert = function () {
+    var advertElement = document.querySelector('.map__card');
+    if (advertElement) {
+      advertElement.remove();
     }
   };
 
@@ -179,8 +180,32 @@
     fragment.appendChild(errorElement);
     var elementMain = document.querySelector('main');
     elementMain.insertAdjacentElement('afterbegin', errorElement);
-
+    document.addEventListener('keydown', escErrorMessageHandler);
+    document.addEventListener('click', clickErrorMessageHandler);
+    document.querySelector('.error__button').addEventListener('click', removeError);
   };
+
+  var removeError = function () {
+    var error = document.querySelector('.error');
+    if (error) {
+      error.remove();
+    }
+  };
+
+  var clickErrorMessageHandler = function () {
+    removeError();
+    document.removeEventListener('click', clickErrorMessageHandler);
+  };
+
+  var escErrorMessageHandler = function (evt) {
+    if (evt.keyCode === 27) {
+      removeError();
+      document.removeEventListener('keydown', escErrorMessageHandler);
+    }
+  };
+
+
+
 
   // filtering
 
@@ -301,6 +326,11 @@
     addressElem.value = position.x + ', ' + position.y;
   };
 
+  var setMainPinToDefaultPlace = function () {
+    mainPinElement.style.top = '375px';
+    mainPinElement.style.left = '570px';
+  };
+
   var setPinPosition = function () {
     var addressElem = document.querySelector('#address');
     var position = getPinPosition(mainPinElement, MAIN_PIN_OFFSET_X, MAIN_PIN_OFFSET_Y);
@@ -325,6 +355,11 @@
 
   window.pin = {renderPins: renderPins,
     errorHandler: errorHandler,
-    loadedPins: loadedPins
+    loadedPins: loadedPins,
+    removePins: removePins,
+    removeAdvert: removeAdvert,
+    types: TYPES,
+    setPinStartPosition: setPinStartPosition,
+    setMainPinToDefaultPlace: setMainPinToDefaultPlace,
   };
 })();
