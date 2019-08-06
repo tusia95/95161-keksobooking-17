@@ -204,27 +204,71 @@
     }
   };
 
-
-
-
   // filtering
 
   var loadedPins = [];
 
   var successHandler = function (data) {
     loadedPins = data;
-    var slicedPins = data.slice(0, window.utils.numberPins);
-    renderPins(slicedPins);
+    renderSlisedPins(loadedPins);
     // showAdvert();
     // renderAdvert(loadedPins[1]);
     // addListenersOnPins();
   };
 
-
-  var onHouseTypeChange = function () {
-    removePins();
+  var renderSlisedPins = function (data) {
+    var slicedPins = data.slice(0, window.utils.numberPins);
+    renderPins(slicedPins);
+  };
+  //
+  // add type filter
+  var onHouseTypeChange = function (pin) {
     var accomType = houseTypeList.value;
-    window.filtering.filterFotTypePins(accomType, renderPins, loadedPins);
+    return window.filtering.filterForTypePins(accomType, pin);
+  };
+
+  // price filter
+  var onPriceLevelChange = function (pin) {
+    var priceLevel = priceLevelList.value;
+    return window.filtering.filterForPrice(priceLevel, pin);
+  };
+
+  // roomsNumber
+  var onRoomsNumberChange = function (pin) {
+    var roomsNumber = roomsNumberList.value;
+    return window.filtering.filterForRoomsNumber(roomsNumber, pin);
+  };
+  // guests number filter
+  var onGuestsNumberChange = function (pin) {
+    var guestsNumber = guestsNumberList.value;
+    return window.filtering.filterForGuestsNumber(guestsNumber, pin);
+  };
+
+
+  // var funcNam = 'onFeatureChange' + FEATURES[i];
+  var onFeatureCheckboxChange = function (pin, i) {
+    var featureCheck;
+    if (featureFilterCheckboxes[i].checked === true) {
+      var checkedFeatureValue = featureFilterCheckboxes[i].value;
+    } else {
+      checkedFeatureValue = 'any';
+    }
+    featureCheck = window.filtering.filterForFeature(checkedFeatureValue, pin);
+    return featureCheck;
+  };
+
+  // on every filter change we should check all filters
+  var filterChangeHandler = function () {
+    removePins();
+    var filteredPins = loadedPins.filter(function (it) {
+      // console.log(onHouseTypeChange(it) && onPriceLevelChange(it) && onRoomsNumberChange(it) && onGuestsNumberChange(it));
+      return onHouseTypeChange(it) && onPriceLevelChange(it) && onRoomsNumberChange(it) && onGuestsNumberChange(it) &&
+   onFeatureCheckboxChange(it, 0) && onFeatureCheckboxChange(it, 1) && onFeatureCheckboxChange(it, 2)
+    && onFeatureCheckboxChange(it, 3) && onFeatureCheckboxChange(it, 4) && onFeatureCheckboxChange(it, 5);
+    });
+    window.setTimeout(function () {
+      renderSlisedPins(filteredPins);
+    }, 300);
   };
 
   var removePins = function () {
@@ -236,12 +280,28 @@
     });
   };
   var houseTypeList = document.querySelector('#housing-type');
+  var priceLevelList = document.querySelector('#housing-price');
+  var roomsNumberList = document.querySelector('#housing-rooms');
+  var guestsNumberList = document.querySelector('#housing-guests');
+  var featureFilters = document.querySelector('#housing-features');
+  var featureFilterCheckboxes = featureFilters.querySelectorAll('input');
 
-  houseTypeList.addEventListener('change', onHouseTypeChange);
+  houseTypeList.addEventListener('change', filterChangeHandler);
+  priceLevelList.addEventListener('change', filterChangeHandler);
+  roomsNumberList.addEventListener('change', filterChangeHandler);
+  guestsNumberList.addEventListener('change', filterChangeHandler);
+  //
+  featureFilterCheckboxes[0].addEventListener('change', filterChangeHandler);
+  featureFilterCheckboxes[1].addEventListener('change', filterChangeHandler);
+  featureFilterCheckboxes[2].addEventListener('change', filterChangeHandler);
+  featureFilterCheckboxes[3].addEventListener('change', filterChangeHandler);
+  featureFilterCheckboxes[4].addEventListener('change', filterChangeHandler);
+  featureFilterCheckboxes[5].addEventListener('change', filterChangeHandler);
+
+  //  drug and drop for main pin
   var mainPinElement = document.querySelector('.map__pin--main');
   var moveCount = 0;
 
-  //  drug and drop for main pin
 
   mainPinElement.addEventListener('mousedown', function (evt) {
     evt.preventDefault();
@@ -361,5 +421,6 @@
     types: TYPES,
     setPinStartPosition: setPinStartPosition,
     setMainPinToDefaultPlace: setMainPinToDefaultPlace,
+    renderSlisedPins: renderSlisedPins
   };
 })();
