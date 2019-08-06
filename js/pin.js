@@ -260,6 +260,7 @@
   // on every filter change we should check all filters
   var filterChangeHandler = function () {
     removePins();
+    removeAdvert();
     var filteredPins = loadedPins.filter(function (it) {
       // console.log(onHouseTypeChange(it) && onPriceLevelChange(it) && onRoomsNumberChange(it) && onGuestsNumberChange(it));
       return onHouseTypeChange(it) && onPriceLevelChange(it) && onRoomsNumberChange(it) && onGuestsNumberChange(it) &&
