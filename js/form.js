@@ -19,14 +19,8 @@
     TWO: '2',
     THREE: '3',
     HUNDRED: '100'
-  }
+  };
 
-  /* var ROOMS_NOTFOR_GUESTS = {
-    1: ['2', '3', '0'],
-    2: ['1', '2'],
-    3: ['1', '2', '3'],
-    100: ['0']
-  };*/
   var accomList = document.querySelector('#type');
   // set to value -> min price
   var setMinPrice = function () {
