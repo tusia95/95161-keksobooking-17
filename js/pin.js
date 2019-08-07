@@ -25,7 +25,7 @@
     fragment.appendChild(pinElement);
     elementMapPins.appendChild(fragment);
     addOnPinClickListener(pinElement, pin);
-    // return pinElement;
+
   };
 
   // show pins on map
@@ -39,8 +39,7 @@
   var advertTemplate = document.querySelector('#card')
   .content
   .querySelector('.map__card');
-  //
-  //
+
   var renderAdvert = function (pin) {
     var advertElement = advertTemplate.cloneNode(true);
 
@@ -54,7 +53,7 @@
     var featuresList = advertElement.querySelector('.popup__features');
     var descriptionElement = advertElement.querySelector('.popup__description');
     var photosElement = advertElement.querySelector('.popup__photos');
-    //
+
     featuresList.innerHTML = '';
     var featuresFragment = document.createDocumentFragment();
     pin.offer.features.forEach(function (it) {
@@ -62,7 +61,7 @@
     });
 
     featuresList.appendChild(featuresFragment);
-    //
+
     photosElement.innerHTML = '';
     var photoFragment = document.createDocumentFragment();
     pin.offer.photos.forEach(function (it) {
@@ -70,7 +69,7 @@
     });
 
     photosElement.appendChild(photoFragment);
-    //
+
     avatarElement.src = pin.author.avatar;
     titleElement.textContent = pin.offer.title;
     addressElement.textContent = pin.offer.address;
@@ -79,8 +78,6 @@
     capacityElement.textContent = pin.offer.rooms + ' комнаты для ' + pin.offer.guests + ' гостей.';
     timeElement.textContent = 'Заезд после ' + pin.offer.checkin + ', выезд до ' + pin.offer.checkout;
     descriptionElement.textContent = pin.offer.description;
-    // photosElement.src = pin.offer.photos;
-    // avtarElement.alt = 'advertisment name';
     var fragment = document.createDocumentFragment();
     fragment.appendChild(advertElement);
     var elementMap = document.querySelector('.map');
@@ -91,7 +88,6 @@
     closePopupElement.addEventListener('click', function () {
       removeAdvert();
     });
-    // var element = advertElement;
     var escAdvertHandler = function (evt) {
       if (evt.keyCode === 27) {
         removeAdvert();
@@ -210,13 +206,10 @@
 
   var successHandler = function (data) {
     loadedPins = data;
-    renderSlisedPins(loadedPins);
-    // showAdvert();
-    // renderAdvert(loadedPins[1]);
-    // addListenersOnPins();
+    renderSlicedPins(loadedPins);
   };
 
-  var renderSlisedPins = function (data) {
+  var renderSlicedPins = function (data) {
     var slicedPins = data.slice(0, window.utils.numberPins);
     renderPins(slicedPins);
   };
@@ -245,7 +238,6 @@
   };
 
 
-  // var funcNam = 'onFeatureChange' + FEATURES[i];
   var onFeatureCheckboxChange = function (pin, i) {
     var featureCheck;
     if (featureFilterCheckboxes[i].checked === true) {
@@ -262,13 +254,12 @@
     removePins();
     removeAdvert();
     var filteredPins = loadedPins.filter(function (it) {
-      // console.log(onHouseTypeChange(it) && onPriceLevelChange(it) && onRoomsNumberChange(it) && onGuestsNumberChange(it));
       return onHouseTypeChange(it) && onPriceLevelChange(it) && onRoomsNumberChange(it) && onGuestsNumberChange(it) &&
    onFeatureCheckboxChange(it, 0) && onFeatureCheckboxChange(it, 1) && onFeatureCheckboxChange(it, 2)
     && onFeatureCheckboxChange(it, 3) && onFeatureCheckboxChange(it, 4) && onFeatureCheckboxChange(it, 5);
     });
     window.setTimeout(function () {
-      renderSlisedPins(filteredPins);
+      renderSlicedPins(filteredPins);
     }, 300);
   };
 
@@ -377,8 +368,7 @@
   var getPinPosition = function (element, offsetX, offsetY) {
     var positionX = element.offsetLeft + offsetX;
     var positionY = element.offsetTop + offsetY;
-    var elementPosition = {'x': positionX, 'y': positionY};
-    return elementPosition;
+    return {'x': positionX, 'y': positionY};
   };
 
   var setPinStartPosition = function () {
@@ -422,6 +412,6 @@
     types: TYPES,
     setPinStartPosition: setPinStartPosition,
     setMainPinToDefaultPlace: setMainPinToDefaultPlace,
-    renderSlisedPins: renderSlisedPins
+    renderSlicedPins: renderSlicedPins
   };
 })();

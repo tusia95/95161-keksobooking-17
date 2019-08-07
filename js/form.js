@@ -14,6 +14,13 @@
     time: '12:00',
   };
 
+  var RoomsNumber = {
+    ONE: '1',
+    TWO: '2',
+    THREE: '3',
+    HUNDRED: '100'
+  }
+
   /* var ROOMS_NOTFOR_GUESTS = {
     1: ['2', '3', '0'],
     2: ['1', '2'],
@@ -56,25 +63,23 @@
   var guestsNumberList = document.querySelector('#capacity');
 
   var sinchronizeGuestForRooms = function () {
-    // console.log(roomNumbersList.value);
     switch (roomsNumberList.value) {
-      case '1':
+      case RoomsNumber.ONE:
         validateList(guestsNumberList, '1', ['2', '3', '0']);
         break;
-      case '2':
+      case RoomsNumber.TWO:
         validateList(guestsNumberList, '2', ['3', '0']);
         break;
-      case '3':
+      case RoomsNumber.THREE:
         validateList(guestsNumberList, '3', ['0']);
         break;
-      case '100':
+      case RoomsNumber.HUNDRED:
         validateList(guestsNumberList, '0', ['1', '2', '3']);
         break;
     }
   };
 
   roomsNumberList.addEventListener('change', sinchronizeGuestForRooms);
-  // guestsNumberList.addEventListener('change', sinchronizeRoomsForGuests);
 
   var validateList = function (listElement, selectedValue, disabledValues) {
     listElement.value = selectedValue;
@@ -134,22 +139,32 @@
   };
 
   disableFieldsets();
-  // activateAdvertForm();
   disableFilters(true);
   sinchronizeGuestForRooms();
 
   // add listener to form submit btn
   var advertForm = document.querySelector('.ad-form');
 
+  // add listener to form reset btn
+  var resetBtn = advertForm.querySelector('.ad-form__reset');
+
   var uploadHandler = function (evt) {
     window.upload(new FormData(advertForm), function () {
-      resetFormFields();
+      submitFormHandler();
     }, window.pin.errorHandler);
     evt.preventDefault();
   };
 
-  var resetFormFields = function () {
+  var submitFormHandler = function () {
     showSuccessUploadMessage();
+    resetFormFields();
+  };
+
+  var resetFormFields = function () {
+    // showSuccessUploadMessage();
+    disableFieldsets();
+    disableFilters(true);
+    // window.map.disableMap();
     advertForm.querySelector('#title').value = '';
     advertForm.querySelector('#type').value = FORM_DEFAULT_VALUES.type;
     advertForm.querySelector('#price').value = '';
@@ -205,5 +220,6 @@
   document.addEventListener('click', clickSuccessMessageHandler);
 
   advertForm.addEventListener('submit', uploadHandler);
+  resetBtn.addEventListener('click', resetFormFields);
 
 })();

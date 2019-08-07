@@ -15,7 +15,7 @@
 
       }
     }
-    // console.log(sameAccomTypePins);
+
     return sameAccomTypePins;
   };
   // price filter
@@ -27,8 +27,8 @@
         priceInTheRangePins = true;
       }
     }
-    // console.log(sameAccomTypePins);
-    return priceInTheRangePins;// renderPins(priceInTheRangePins);
+
+    return priceInTheRangePins;
   };
   // room number filter
 
@@ -36,19 +36,17 @@
     if (roomsNumber === 'any') {
       var withRoomNumberPins = true;
     } else {
-    // console.log(loadedPins[0].offer.rooms);
       if (String(pin.offer.rooms) === roomsNumber) {
         withRoomNumberPins = true;
       }
     }
-    return withRoomNumberPins; // renderPins(withRoomNumberPins);
+    return withRoomNumberPins;
   };
 
   var filterForGuestsNumber = function (guestsNumber, pin) {
     if (guestsNumber === 'any') {
       var withGuestsNumberPins = true;
     } else {
-    // console.log(loadedPins[0].offer.rooms);
       if (String(pin.offer.guests) === guestsNumber) {
         withGuestsNumberPins = true;
       }
@@ -64,7 +62,7 @@
     }
     return isWithFeaturePins;
   };
-  // renderPins(window.pin. renderSlisedPins(withFeaturePins));
+
 
   var checkPinFeaturesContainsValue = function (checkedFeatureValue, pin) {
     var doesContainValue = false;
@@ -76,16 +74,12 @@
     return doesContainValue;
   };
 
-  // var getForAllFiltersValuePins = function (accomType, priceLevel, roomsNumber, guestsNumber, renderPins, loadedPins) {
-  //  var resultPinsArray =
-
 
   window.filtering = {filterForTypePins: filterForTypePins,
     filterForPrice: filterForPrice,
     filterForRoomsNumber: filterForRoomsNumber,
     filterForGuestsNumber: filterForGuestsNumber,
     filterForFeature: filterForFeature,
-  //  getForAllFiltersValuePins: getForAllFiltersValuePins
 
   };
 })();

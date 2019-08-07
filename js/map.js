@@ -1,14 +1,18 @@
 'use strict';
-// remove map--fadded
+
 (function () {
   var mapWidth = document.querySelector('.map__pins').offsetWidth;
+  var elementMap = document.querySelector('.map');
   var activateMap = function () {
-    var elementMap = document.querySelector('.map');
     elementMap.classList.remove('map--faded');
+  };
+  var disableMap = function () {
+    elementMap.classList.add('map--faded');
   };
   window.map = {
     mapWidth: mapWidth,
-    activateMap: activateMap
+    activateMap: activateMap,
+    disableMap: disableMap
   };
 })();
 
