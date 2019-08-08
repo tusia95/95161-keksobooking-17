@@ -91,12 +91,16 @@
   };
   // enable/disable form`s parts
 
+  var adFormElement = document.querySelector('.ad-form');
   // remove ad-form--disabled;
   var activateAdvertForm = function () {
-    var adFormElement = document.querySelector('.ad-form');
     adFormElement.classList.remove('ad-form--disabled');
   };
 
+  // disable Advert form
+  var disableAdvertForm = function () {
+    adFormElement.classList.add('ad-form--disabled');
+  };
 
   // disable filters form
   var disableFilters = function (isDisabled) {
@@ -155,10 +159,11 @@
   };
 
   var resetFormFields = function () {
-    // showSuccessUploadMessage();
+    window.utils.isFirstDnD = true;
     disableFieldsets();
     disableFilters(true);
-    // window.map.disableMap();
+    disableAdvertForm();
+    window.map.disableMap();
     advertForm.querySelector('#title').value = '';
     advertForm.querySelector('#type').value = FORM_DEFAULT_VALUES.type;
     advertForm.querySelector('#price').value = '';

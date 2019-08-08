@@ -5,7 +5,6 @@
   var MAIN_PIN_SIZE = 68;
   var MAIN_PIN_OFFSET_X = 34;
   var MAIN_PIN_OFFSET_Y = 90;
-  var MAX_COUNTER_VALUE = 2;
   var TYPES = {palace: 'Дворец', flat: 'Квартира', house: 'Дом', bungalo: 'Бунгало'};
   var FEATURES = ['wifi', 'dishwasher', 'parking', 'washer', 'elevator', 'conditioner'];
 
@@ -291,8 +290,9 @@
   featureFilterCheckboxes[5].addEventListener('change', filterChangeHandler);
 
   //  drug and drop for main pin
+  // var isFirstDrugnDrop = false;
+  window.utils.isFirstDnD = true;
   var mainPinElement = document.querySelector('.map__pin--main');
-  var moveCount = 0;
 
 
   mainPinElement.addEventListener('mousedown', function (evt) {
@@ -308,9 +308,9 @@
     var onMouseMove = function (moveEvt) {
       moveEvt.preventDefault();
       dragged = true;
-      if (moveCount < MAX_COUNTER_VALUE) {
+      /* if (moveCount < MAX_COUNTER_VALUE) {
         moveCount++;
-      }
+      } */
 
       var shift = {
         x: startCoords.x - moveEvt.clientX,
@@ -330,13 +330,15 @@
         mainPinElement.style.left = newLeft + 'px';
         setPinPosition();
       }
+
       // add on mouse move: form activation
-      if (moveCount === 1) {
+      if (window.utils.isFirstDnD) {
         window.load(successHandler, errorHandler);
         window.form.enableFieldsets();
         window.map.activateMap();
         window.form.activateAdvertForm();
         window.form.enableFilters();
+        window.utils.isFirstDnD = false;
       }
     };
 

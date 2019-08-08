@@ -7,11 +7,13 @@
   var MIN_Y = 130;
   var MAX_Y = 630;
   var SERVER_CODE_OK = 200;
+  var isFirstDnD;
   window.utils = {
     arSize: ARRAY_SIZE,
     miny: MIN_Y,
     maxy: MAX_Y,
     numberPins: NUMBER_SHOWN_PINS,
-    serverCodeOk: SERVER_CODE_OK
+    serverCodeOk: SERVER_CODE_OK,
+    isFirstDnD: isFirstDnD
   };
 })();
